@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insurance Purchase Predictor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Insurance Purchase Prediction</h1>
+
+    <label for="age">Age</label>
+    <input type="number" id="age" value="30">
+
+    <label for="weight">Weight (kg)</label>
+    <input type="number" id="weight" value="70">
+
+    <label for="height">Height (cm)</label>
+    <input type="number" id="height" value="170">
+
+    <label for="income_lpa">Annual Income (LPA)</label>
+    <input type="number" step="0.01" id="income_lpa" value="10">
+
+    <label for="smoker">Smoking Status</label>
+    <select id="smoker">
+        <option value="false">Non Smoker</option>
+        <option value="true">Smoker</option>
+    </select>
+
+    <label for="city">City</label>
+    <select id="city">
+        <option value="Mumbai">Mumbai</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Kolkata">Kolkata</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Pune">Pune</option>
+        <option value="Jaipur">Jaipur</option>
+        <option value="Chandigarh">Chandigarh</option>
+        <option value="Indore">Indore</option>
+        <option value="Lucknow">Lucknow</option>
+        <option value="Patna">Patna</option>
+        <option value="Ranchi">Ranchi</option>
+        <option value="Visakhapatnam">Visakhapatnam</option>
+        <option value="Coimbatore">Coimbatore</option>
+        <option value="Surat">Surat</option>
+        <option value="Vadodara">Vadodara</option>
+        <option value="Nagpur">Nagpur</option>
+        <option value="Mysore">Mysore</option>
+    </select>
+
+    <label for="occupation">Occupation</label>
+    <select id="occupation">
+        <option value="retired">Retired</option>
+        <option value="freelancer">Freelancer</option>
+        <option value="student">Student</option>
+        <option value="government_job">Government Job</option>
+        <option value="business_owner">Business Owner</option>
+        <option value="unemployed">Unemployed</option>
+        <option value="private_job">Private Job</option>
+    </select>
+
+    <button onclick="predictPremium()">
+        Predict Insurance Category
+    </button>
+
+    <h2 id="result"></h2>
+
+</div>
+
+<script>
+
+async function predictPremium() {
+
+    const data = {
+
+        age: parseInt(
+            document.getElementById("age").value
+        ),
+
+        weight: parseFloat(
+            document.getElementById("weight").value
+        ),
+
+        height:
+            parseFloat(document.getElementById("height").value) / 100,
+
+        income_lpa: parseFloat(
+            document.getElementById("income_lpa").value
+        ),
+
+        smoker:
+            document.getElementById("smoker").value === "true",
+
+        city:
+            document.getElementById("city").value,
+
+        occupation:
+            document.getElementById("occupation").value
+    };
+
+    const response = await fetch("/predict", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    document.getElementById("result").innerHTML =
+        "Predicted Premium Category: " +
+        result.predicted_category;
+}
+
+</script>
+
+</body>
+</html>
